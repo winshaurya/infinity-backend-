@@ -1,0 +1,518 @@
+.app {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  min-height: 100vh;
+  padding: 15px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: white;
+  padding: 15px;
+  border: 1px solid #ccc;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.system-info {
+  font-size: 12px;
+  font-weight: bold;
+  color: darkgreen;
+  margin-bottom: 5px;
+}
+
+h1 {
+  font-size: 14px;
+  font-weight: bold;
+  color: blue;
+  margin: 0;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.form-grid label {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.form-grid input, .form-grid select {
+  width: 100%;
+  padding: 2px;
+  font-size: 12px;
+}
+
+.carbon-types {
+  display: flex;
+  gap: 10px;
+}
+
+.carbon-types label {
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.functional-groups-title {
+  font-size: 12px;
+  font-weight: bold;
+  margin-bottom: 2px;
+}
+
+.functional-groups {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.fg-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.fg-item label {
+  font-size: 12px;
+  text-align: center;
+  margin-bottom: 1px;
+  width: 100%;
+}
+
+.fg-item input {
+  width: 50px;
+  padding: 1px;
+  font-size: 12px;
+}
+
+.valency-status {
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.cpu-cores {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.cpu-cores label {
+  font-size: 12px;
+}
+
+.output-dir {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 5px;
+  margin-bottom: 5px;
+}
+
+.output-dir input {
+  padding: 2px;
+  font-size: 12px;
+}
+
+.buttons {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 5px;
+}
+
+button {
+  padding: 5px 10px;
+  background-color: #e0e0e0;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+button:hover {
+  background-color: #d0d0d0;
+}
+
+.status {
+  font-size: 12px;
+  margin-bottom: 3px;
+  border: 1px solid #ccc;
+  padding: 2px;
+  background-color: #f0f0f0;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 20px;
+  background-color: #e0e0e0;
+  border: 1px solid #ccc;
+  margin-bottom: 3px;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: #4caf50;
+  transition: width 0.3s;
+}
+
+.perf-label {
+  font-size: 12px;
+  font-weight: bold;
+  color: green;
+  margin-bottom: 2px;
+}
+
+.batch-label {
+  font-size: 12px;
+  color: blue;
+  margin-bottom: 2px;
+}
+
+.info-text {
+  font-size: 12px;
+  color: blue;
+}
+
+.molecules {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.molecule {
+  border: 1px solid #ccc;
+  padding: 10px;
+  font-size: 12px;
+}
+
+.profile-button {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 20px;
+  z-index: 1000;
+}
+
+.profile-box {
+  position: fixed;
+  top: 60px;
+  left: 20px;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  z-index: 1000;
+}
+
+.toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  z-index: 1000;
+}
+
+.toast-error {
+  background-color: #f44336;
+}
+
+.toast-success {
+  background-color: #4caf50;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  max-width: 400px;
+  width: 100%;
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  text-align: center;
+}
+
+.modal-content form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.modal-content input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.modal-content button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 5px 0;
+}
+
+.modal-content button:hover {
+  background-color: #0056b3;
+}
+
+.profile-modal {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  max-width: 600px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.profile-header h2 {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: #666;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.close-btn:hover {
+  background-color: #f0f0f0;
+}
+
+.profile-tabs {
+  display: flex;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.profile-tabs button {
+  flex: 1;
+  padding: 16px 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  color: #666;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+}
+
+.profile-tabs button.active {
+  color: #007bff;
+  border-bottom-color: #007bff;
+}
+
+.profile-tabs button:hover {
+  background-color: #f8f9fa;
+}
+
+.profile-content {
+  padding: 24px;
+}
+
+.profile-section h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 20px;
+  color: #333;
+}
+
+.profile-field {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.profile-field:last-child {
+  border-bottom: none;
+}
+
+.profile-field label {
+  font-weight: 500;
+  color: #555;
+}
+
+.profile-field span {
+  color: #333;
+  font-weight: 600;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #555;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.logout-btn {
+  background-color: #dc3545 !important;
+  color: white !important;
+  border: none !important;
+  padding: 10px 20px !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  margin-top: 20px !important;
+  transition: background-color 0.2s !important;
+}
+
+.logout-btn:hover {
+  background-color: #c82333 !important;
+}
+
+.upgrade-btn, .billing-btn {
+  background-color: #28a745 !important;
+  color: white !important;
+  border: none !important;
+  padding: 10px 20px !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  margin-right: 10px !important;
+  margin-top: 20px !important;
+  transition: background-color 0.2s !important;
+}
+
+.upgrade-btn:hover, .billing-btn:hover {
+  background-color: #218838 !important;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .app {
+    padding: 10px;
+  }
+
+  .container {
+    padding: 10px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .functional-groups {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .cpu-cores {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .output-dir {
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+
+  .buttons {
+    flex-wrap: wrap;
+  }
+
+  .profile-box {
+    position: static;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .functional-groups {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  h1 {
+    font-size: 12px;
+  }
+
+  .system-info {
+    font-size: 10px;
+  }
+
+  .form-grid label, .form-grid input, .form-grid select {
+    font-size: 10px;
+  }
+
+  .fg-item label, .fg-item input {
+    font-size: 10px;
+  }
+
+  .buttons button {
+    font-size: 10px;
+    padding: 5px 10px;
+  }
+}
