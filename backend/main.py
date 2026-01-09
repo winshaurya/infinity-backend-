@@ -22,10 +22,13 @@ load_dotenv()
 
 app = FastAPI(title="Chemistry SaaS API")
 
-# CORS
+# CORS Configuration
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
+BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:8000")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, specify your frontend domain
+    allow_origins=[FRONTEND_URL],  # Allow frontend domain
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -40,8 +43,8 @@ print(f"Loading SUPABASE_URL: {SUPABASE_URL}")
 print(f"Loading SUPABASE_SERVICE_ROLE_KEY: {SUPABASE_SERVICE_ROLE_KEY[:20] if SUPABASE_SERVICE_ROLE_KEY else 'Not set'}...")
 print(f"Loading SUPABASE_ANON_KEY: {SUPABASE_ANON_KEY[:20] if SUPABASE_ANON_KEY else 'Not set'}...")
 
-# Use service role key for server-side operations
-supabase_key = SUPABASE_SERVICE_ROLE_KEY or SUPABASE_ANON_KEY
+# Use anon key for server-side operations (service role key may have restrictions)
+supabase_key = SUPABASE_ANON_KEY
 
 if not SUPABASE_URL or not supabase_key:
     raise ValueError("SUPABASE_URL and either SUPABASE_SERVICE_ROLE_KEY or SUPABASE_ANON_KEY must be set")
