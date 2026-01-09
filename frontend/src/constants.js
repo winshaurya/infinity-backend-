@@ -5,6 +5,6 @@ export const FUNCTIONAL_GROUPS = [
   'S_Bivalent', 'S_Tetravalent', 'S_Hexavalent', 'S_Chain_Bi', 'S_Chain_Tetra', 'S_Chain_Hexa'
 ]
 
-export const API_BASE = '/api'
+export const API_BASE = 'http://localhost:8000'
 
 export const CARBON_TYPES = ['primary', 'secondary', 'tertiary']

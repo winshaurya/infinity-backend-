@@ -6,9 +6,35 @@ function DownloadSection({ user, jobs, profile, onDownload, onRefillCredits }) {
     moleculesCount: 1000,
     format: 'csv'
   })
+  const [isDownloading, setIsDownloading] = useState(false)
+  const [downloadProgress, setDownloadProgress] = useState(0)
 
-  const handleDownload = () => {
-    onDownload(downloadForm)
+  const handleDownload = async () => {
+    setIsDownloading(true)
+    setDownloadProgress(0)
+
+    // Simulate progress for SDF rendering
+    if (downloadForm.format === 'sdf') {
+      const progressInterval = setInterval(() => {
+        setDownloadProgress(prev => {
+          if (prev >= 90) {
+            clearInterval(progressInterval)
+            return 90
+          }
+          return prev + 10
+        })
+      }, 200)
+    }
+
+    try {
+      await onDownload(downloadForm)
+      setDownloadProgress(100)
+    } finally {
+      setTimeout(() => {
+        setIsDownloading(false)
+        setDownloadProgress(0)
+      }, 1000)
+    }
   }
 
   if (!user) return null
@@ -44,8 +70,8 @@ function DownloadSection({ user, jobs, profile, onDownload, onRefillCredits }) {
           <option value="sdf">SDF</option>
           {profile?.subscription_tier === 'fullaccess' && <option value="all">All (Fullaccess only)</option>}
         </select>
-        <button onClick={handleDownload} disabled={!downloadForm.jobId}>
-          Download
+        <button onClick={handleDownload} disabled={!downloadForm.jobId || isDownloading}>
+          {isDownloading ? 'Downloading...' : 'Download'}
         </button>
         {downloadForm.moleculesCount > 0 && (
           <span className="credit-cost">
@@ -53,6 +79,20 @@ function DownloadSection({ user, jobs, profile, onDownload, onRefillCredits }) {
           </span>
         )}
       </div>
+
+      {isDownloading && downloadForm.format === 'sdf' && (
+        <div className="download-progress">
+          <div className="progress-text">
+            Rendering compounds... {downloadProgress}%
+          </div>
+          <div className="progress-bar">
+            <div
+              className="progress-fill"
+              style={{ width: `${downloadProgress}%` }}
+            ></div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

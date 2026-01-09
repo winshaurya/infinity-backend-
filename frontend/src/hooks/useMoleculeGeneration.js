@@ -37,7 +37,7 @@ export function useMoleculeGeneration(user, supabase, showToast) {
     currentValency += count
 
     if (currentValency > maxValency) {
-      alert(`Cannot add more functional groups. The maximum allowed is ${maxValency}.`)
+      showToast(`Cannot add more functional groups. The maximum allowed is ${maxValency}.`, 'error')
       return
     }
 
