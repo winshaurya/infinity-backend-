@@ -7,6 +7,13 @@ WORKDIR /app
 # Install system dependencies for RDKit
 RUN apt-get update && apt-get install -y \
     build-essential \
+    libxrender1 \
+    libxext6 \
+    libx11-6 \
+    libglib2.0-0 \
+    libsm6 \
+    libxrender-dev \
+    libxext-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements first for better caching
