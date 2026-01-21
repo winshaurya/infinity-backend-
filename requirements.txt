@@ -20,5 +20,3 @@ psutil==5.9.6
 # on a platform that supports custom images, or remove/replace RDKit usage.
 # Try to install a pip wheel that matches your target platform.
 rdkit==2023.9.5
-
-
