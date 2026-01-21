@@ -1,26 +1,21 @@
-# Use Python 3.11 slim image
-FROM python:3.11-slim
+# Use conda-forge with RDKit pre-installed for faster builds
+FROM condaforge/mambaforge:latest
 
 # Set working directory
 WORKDIR /app
 
-# Install system dependencies for RDKit
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    libxrender1 \
-    libxext6 \
-    libx11-6 \
-    libglib2.0-0 \
-    libsm6 \
-    libxrender-dev \
-    libxext-dev \
-    && rm -rf /var/lib/apt/lists/*
+# Create conda environment with RDKit
+RUN mamba create -n rdkit-env python=3.11 rdkit numpy pandas -c conda-forge -y && \
+    conda clean --all -y
+
+# Activate environment
+ENV PATH="/opt/conda/envs/rdkit-env/bin:$PATH"
 
 # Copy requirements first for better caching
 COPY requirements.txt .
 
-# Install Python dependencies
-RUN pip install --no-cache-dir --verbose -r requirements.txt
+# Install remaining Python dependencies (excluding RDKit which is already installed)
+RUN pip install --no-cache-dir fastapi uvicorn pydantic supabase python-dotenv networkx psutil
 
 # Copy the rest of the application
 COPY . .
