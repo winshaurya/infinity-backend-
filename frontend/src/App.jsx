@@ -133,16 +133,12 @@ function App() {
 
       const data = await response.json()
 
-      // The backend now returns { success: true, job_id, molecules: [...], credits_used, ... }
-      // We take the SMILES list from 'molecules' and render/zip them on the frontend
+      // Backend now returns only the SMILES list: { success, job_id, molecules: [...] }
       const { molecules, job_id } = data
       const format = downloadForm.format
 
-      // Import download utilities
+      // Import download utility and create the ZIP locally
       const { createDownloadBlob } = await import('./utils/downloadUtils.js')
-
-      // Create download blob using RDKit.js in browser
-      // This will now use the updated logic in downloadUtils.js to create the structured ZIP
       const blob = await createDownloadBlob(molecules, format, job_id, onProgress)
 
       let filename
@@ -162,7 +158,7 @@ function App() {
       document.body.removeChild(a)
       URL.revokeObjectURL(url)
 
-      setToast({ message: data.message || `Downloaded ${molecules.length} molecules.`, type: 'success' })
+      setToast({ message: data.message || 'Download complete.', type: 'success' })
       setTimeout(() => setToast(null), 5000)
     } catch (error) {
       setToast({ message: 'Download failed: ' + error.message, type: 'error' })

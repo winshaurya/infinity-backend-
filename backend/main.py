@@ -597,7 +597,7 @@ async def download_molecules(request: DownloadRequest, user_id: str = Depends(ge
             "molecules": selected_smiles,
             "credits_used": credits_required,
             "remaining_credits": new_credits,
-            "message": f"Retrieved {len(selected_smiles)} molecules for processing. {credits_required} credits deducted."
+            "message": f"Retrieved {len(selected_smiles)} molecules for processed results. {credits_required} credits deducted."
         }
     except HTTPException:
         raise
