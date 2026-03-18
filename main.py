@@ -48,9 +48,19 @@ app = FastAPI(title="Chemistry SaaS API")
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
 BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:8000")
 
+# List of allowed origins for CORS
+# In production, this should include your Vercel URL
+ALLOWED_ORIGINS = [
+    FRONTEND_URL,
+    "https://infinityatoms.vercel.app",
+    "https://infinity-molecules.vercel.app",
+    "http://localhost:5173",
+    "http://localhost:3000"
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[FRONTEND_URL],  # Allow frontend domain
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -58,7 +68,7 @@ app.add_middleware(
 
 # Generation runtime safeguards
 GENERATION_TIMEOUT_SECONDS = int(os.getenv("GENERATION_TIMEOUT_SECONDS", "180"))
-GENERATION_MAX_WORKERS = int(os.getenv("GENERATION_MAX_WORKERS", "1"))
+GENERATION_MAX_WORKERS = int(os.getenv("GENERATION_MAX_WORKERS", "4"))
 
 PROCESS_POOL = ProcessPoolExecutor(max_workers=GENERATION_MAX_WORKERS)
 
@@ -409,6 +419,7 @@ async def start_generation(request: JobRequest, user_id: str = Depends(get_curre
     # Create job in database
     job_id = str(uuid.uuid4())
     params_dict = request.model_dump()
+    print(f"DEBUG: Starting generation for job {job_id} with params: {params_dict}")
     job_data = {
         'id': job_id,
         'user_id': user_id,
@@ -427,11 +438,15 @@ async def start_generation(request: JobRequest, user_id: str = Depends(get_curre
         )
 
         try:
+            print(f"DEBUG: Running generation with timeout for {job_id}")
             smiles_list = await run_generation_with_timeout(params_dict)
+            print(f"DEBUG: Generation finished for {job_id}, found {len(smiles_list)} molecules")
         except asyncio.TimeoutError:
+            print(f"DEBUG: Generation TIMEOUT for {job_id}")
             update_job_status(job_id, 'failed')
             raise HTTPException(status_code=504, detail="Generation timed out. Please simplify the request and try again.")
         except Exception as e:
+            print(f"DEBUG: Generation FAILED for {job_id}: {str(e)}")
             update_job_status(job_id, 'failed')
             raise HTTPException(status_code=500, detail=f"Generation failed: {str(e)}")
 
@@ -591,59 +606,14 @@ async def download_molecules(request: DownloadRequest, user_id: str = Depends(ge
         # Take requested count
         selected_smiles = smiles_list[:request.molecules_count]
 
-        # Format data based on download format
-        if request.download_format == 'csv':
-            data = 'SMILES\n' + '\n'.join(selected_smiles)
-            content_type = 'text/csv'
-            filename = f'molecules_{request.job_id[:8]}.csv'
-        elif request.download_format == 'molsdf':
-            # Create ZIP file with MOL, SDF, and CSV files
-            zip_buffer = io.BytesIO()
-            with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
-                # Create CSV file
-                csv_data = 'SMILES\n' + '\n'.join(selected_smiles)
-                zip_file.writestr(f'molecules_{request.job_id[:8]}.csv', csv_data)
-                
-                # Create SDF file
-                sdf_data = ''
-                for i, smiles in enumerate(selected_smiles):
-                    try:
-                        mol = Chem.MolFromSmiles(smiles)
-                        if mol:
-                            mol_block = Chem.MolToMolBlock(mol)
-                            sdf_data += mol_block + '\n$$$$\n'
-                    except:
-                        continue  # Skip invalid molecules
-                zip_file.writestr(f'molecules_{request.job_id[:8]}.sdf', sdf_data)
-                
-                # Create individual MOL files
-                for i, smiles in enumerate(selected_smiles):
-                    try:
-                        mol = Chem.MolFromSmiles(smiles)
-                        if mol:
-                            mol_block = Chem.MolToMolBlock(mol)
-                            zip_file.writestr(f'molecule_{i+1:04d}.mol', mol_block)
-                    except:
-                        continue  # Skip invalid molecules
-            
-            data = base64.b64encode(zip_buffer.getvalue()).decode('utf-8')
-            content_type = 'application/zip'
-            filename = f'molecules_{request.job_id[:8]}_package.zip'
-        else:  # json or all
-            data = json.dumps({'molecules': selected_smiles})
-            content_type = 'application/json'
-            filename = f'molecules_{request.job_id[:8]}.json'
-
         return {
             "success": True,
+            "job_id": request.job_id,
+            "molecules": selected_smiles,
             "credits_used": credits_required,
             "remaining_credits": new_credits,
-            "data": data,
-            "content_type": content_type,
-            "filename": filename,
-            "message": f"Downloaded {len(selected_smiles)} molecules. {credits_required} credits deducted."
+            "message": f"Retrieved {len(selected_smiles)} molecules for processed results. {credits_required} credits deducted."
         }
-
     except HTTPException:
         raise
     except Exception as e:
